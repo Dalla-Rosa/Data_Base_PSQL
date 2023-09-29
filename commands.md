@@ -29,6 +29,24 @@
 |select t.valor, t.valor*1.2, 'oi' from tarifa t; |
 |select case when valor < 10 then 'seila' when valor >= 10 then 'casa' end case as valor|
 
+## DML
+| command | description |
+--- | --- | --- |
+|select| what's been asked (projection π) | select * from <tabela> where <itemtable> is <condition> 
+|from| where's is what i want |
+|where| condition of what i want (horizontal cut) |
+
+## Some selects for consults
+
+| command | description |
+--- | --- |
+| select of time | select * from locacao where dtloca between '2020-09-01' and '2020-09-31';  |
+| select of many | select placa, codcli, dtdevo from locacao where tarifa = 'blue' or tarifa = 'green';
+
+
+
+posso colocar o select num from
+
 ## Example of how to create an table in SQL
 create table cliente( <br>
  codcli integer not null, <br>
