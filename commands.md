@@ -31,7 +31,7 @@
 
 ## DML
 | command | description |
---- | --- | --- |
+--- | --- |
 |select| what's been asked (projection π) | select * from <tabela> where <itemtable> is <condition> 
 |from| where's is what i want |
 |where| condition of what i want (horizontal cut) |
@@ -61,3 +61,13 @@ create table cliente( <br>
 ); <br>
 
 
+
+rollback;
+
+coalesce(-1)
+
+select p.nome, f.titulo from pessoa p join elenco e on p.codp = e.codp join filme f on f.codf = e.codf where e.oscar = 'Y';
+
+select filme.titulo, pessoa.nome from filme join pessoa on filme.codd = pessoa.codp where pessoa.nome = 'Alfred'; 
+
+select f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf=e.codf join pessoa p on e.codp^Codp order by f.titulo;
