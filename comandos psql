@@ -1,0 +1,176 @@
+retornar os dados da locações em que os carros ainda não foram retornados(ou não foram devolvidos).
+
+retornar a placa do carro e data de locação para os carros que foram locados em setembro de 2020
+
+retorne as locações, placa do carro, o codigo do cliente, a data de devolução para as locacoes quais as tarifas foram blue ou green 
+
+quero os dados da locação feito pelo cliente c34 na tarifa red
+
+quero retornar todas as tarifas que não foram usadas em nenhuma alocação
+
+
+select * from tarifa where descr not in (select tarifa from locacao);
+
+
+select descr, valor, case when valor < 50 'barata'
+		     when valor < 80 'media'
+		     else 'cara'
+		     end as classe
+		     from tarifa;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4- select f.titulo, p.nome from filme f join pessoa p on f.codd=p.codp;
+5- select f.titulo from filme f join pessoa p on f.codd=p.codp where p.nome = 'Alfred';
+6- select p.nome from pessoa p join elenco e on p.codp = e.codp where upper(e.oscar) = 'Y';
+   select p.nome, count(e.codp) from pessoa p join elenco e on p.codp = e.codp where upper(e.oscar) = 'Y' group by p.nome;
+   select p.nome, count(e.codp) from pessoa p left join (select * from elenco where oscar = 'Y') e on p.codp = e.codp group by p.nome;
+7- insert into filme (codf, titulo, anol, dur, codd) values (222, 'X file', 1992, 112, 177);
+8- select distinct f.titulo from filme f join avaliacao a on f.codf=a.codf where a.nestrelas='5.0';
+9- select f.titulo from filme f join elenco e on f.codf  e.codf join pessoa p on e.codp = p.codp where p.nome = 'Stephen';
+10- select p.nome, f.titulo from pessoa p left join elenco e on p.codp= e.codp left join filme f on e.codf=f.codf order by nome;
+11- select p.nome from pessoa p left join elenco e on p.codp=e.codp where e.codp is null;
+    select p.nome from pessoa p where p.codp not in (select e.codp from elenco e);
+    select p.nome from pessoa p where p.codp not in (select e.codp from elenco e) and p.codp not in (select f.codd from filme f);
+12- 
+13- select titulo, dur from filme f where anol between 1961 and 1970;
+14- 
+15- select count (coment) from avaliacao where email = 'cinefilo@yahoo.com';
+16- select paisn, count(codp) from pessoa group by paisn;
+17- select p.nome from pessoa p where dtnasc = (select min(dtnasc)from pessoa);
+18- select * from filme f where dur > (select avg(dur) from filme);
+19- select f.titulo, count(e.codf) from filme f natural left join elenco e group by f.titulo;
+20- select f.titulo, coalesce(round(avg(a.nestrelas),2)::text,'None') from filme f natural left join avaliacao a group by f.titulo;
+    select f.titulo, coalesce(round(avg(a.nestrelas),2),-1) from filme f natural left join avaliacao a group by f.titulo;
+    
+Q1- select s.sid, s.sname from sailor s natural join reserve r natural join boat b where b.color = 'red';
+    
+Q2- select b.color from boat b natural join reserve r natural join sailor s where s.sname = 'Lubber';
+    
+Q3- select s.sname from sailor s natural join reserve r natural join boat b where exists (select * from boat);
+
+Q4- select s.sname from sailor natural join reserve r natural join boat b where b.color = 'green' or b.color = 'rd';
+    
+    
+Q5- select s.sname from sailor s natural 
+join reserve rr on s.sid = r.sid 
+join boat br on rr.bid = br.bid
+join reserve rg on s.sid = rg.sid
+join boat bg on s.sid = bg.bid
+where bg.color = 'green' and br.color = 'red';
+
+
+
+
+
+Q1- Retomar id e nome dos velejadores com suas respectivas quantidades de reservas.
+
+select sid, sname, count(r.bid) as qtde_reservas from sailor s natural left join reserve r group by s.sid;
+
+Q2- retornar todos os velejadores com rating maior que 2 que fizeram o maior número de reservas.
+
+select s.sname from sailor s natural join reserve r where s.rating > 2 group by s.sid having count(*)=
+(select max (qt) as mx from (select count(*) as qt from sailor s natural join reserve r where s.rating > 2 group by s.sid) t);
+with sailorg2 as (
+	select sid,sname from sailor where rating > 2),
+reserveqt as (
+	count (*) as qt from sailorg2 natural join reserve r group by r.sid),
+reservemx (
+	select max(qt) as mx from reserveqt)
+	select s.sid, s.name fom sailorg2 natural join reserve r
+	group by s.sid
+	having count(*) = (select mx from reservemx);
+	
+Q3- Retorno a cor de barco mais frequente.
+select color from boat group by color having count(*) = (select max (qt) as mx
+from (select count(*) as qt from boat
+group by color)t);
+
+
+
+TRAINS ----------------
+
+
+Atividades:
+1. Retornar as rotas cadastradas no formato:
+Estação Origem	Estação Destino	Distância
+Resultado (sem a rota cadastrada acima):
+from		to			distance		
+Batcity		Dragonpolis	34.5
+Supercity	Giants		23.5
+Supercity	Mycounty	12.4
+Batcity		Mycounty	17.7
+Mycounty	Giants		8.7	
+Edgar Codd	Boyce		10.0
+Giants		Boyce		13.2
+
+Resposta: select sf.names as origem, st.names destino, r.dist as distancia from route r join station sf on r.idsfrom = sf.idsr
+join station st on r.idsto = st.ids;
+
+2. Incluir um novo trem:
+Name: Arrow Passangers: 95 Type: Diesel
+
+Resposta: insert into train (idtr, nametr, capac, typet) values (6, 'Arrow', 95, 2);
+
+3. Incluir uma nova estação:
+Name: Candy Jar
+
+Resposta: insert into station (ids, names) values (8, 'Candy Jar');
+
+4. Incluir uma nova rota:
+Edgar Codd -> Candy Jar Distance: 33
+
+Resposta: insert into route (idsfrom, idsto, dist) values (6, 8, 33.00);
+
+5. Incluir uma nova linha para a rota recem criada:
+Train: Arrow Data: 01/11/2023
+
+Resposta: insert into train_route (idtr, idsfrom, idsto, datet) values (6, 6, 8, '2023-11-01');
+
+6. Implementar uma consulta que retorne no formato:
+Estação Origem	Estação Destino	Distância	Nome Trem	Tipo Trem	Data Partida
+Resultado da consulta (sem a rota incluída acima):
+from		to			distance	train_name	train_type	departure
+Batcity		Dragonpolis	34.5		Coral		Steam		2021-05-10
+Supercity	Mycounty	12.4		Coral		Steam		2022-05-11
+Batcity		Mycounty	17.7		Transalpes	Diesel		2021-12-12
+Mycounty	Giants		8.7			Border		Diesel		2021-11-11
+Edgar Codd	Boyce		10.0		Brave		Steam		2021-11-11
+Giants		Boyce		13.2		Brave		Steam		2021-11-11
+*/
