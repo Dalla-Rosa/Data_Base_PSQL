@@ -55,26 +55,37 @@ select descr, valor, case when valor < 50 'barata'
 
 
 
+1- update avaliacao set coment = 'Uau! Took my breath away !!!' where coment = 'Uau! Tooke my breath away!!!'; 
 
 4- select f.titulo, p.nome from filme f join pessoa p on f.codd=p.codp;
 5- select f.titulo from filme f join pessoa p on f.codd=p.codp where p.nome = 'Alfred';
 6- select p.nome from pessoa p join elenco e on p.codp = e.codp where upper(e.oscar) = 'Y';
    select p.nome, count(e.codp) from pessoa p join elenco e on p.codp = e.codp where upper(e.oscar) = 'Y' group by p.nome;
    select p.nome, count(e.codp) from pessoa p left join (select * from elenco where oscar = 'Y') e on p.codp = e.codp group by p.nome;
-7- insert into filme (codf, titulo, anol, dur, codd) values (222, 'X file', 1992, 112, 177);
+7- select f.codf, f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf = e.codf join pessoa p on e.codp = p.codp order by f.titulo;
+   insert into filme (codf, titulo, anol, dur, codd) values (222, 'X file', 1992, 112, 177);
+
 8- select distinct f.titulo from filme f join avaliacao a on f.codf=a.codf where a.nestrelas='5.0';
-9- select f.titulo from filme f join elenco e on f.codf  e.codf join pessoa p on e.codp = p.codp where p.nome = 'Stephen';
+
+9- select f.titulo from filme f join elenco e on f.codf = e.codf join pessoa p on e.codp = p.codp where p.nome = 'Stephen';
+
 10- select p.nome, f.titulo from pessoa p left join elenco e on p.codp= e.codp left join filme f on e.codf=f.codf order by nome;
+
 11- select p.nome from pessoa p left join elenco e on p.codp=e.codp where e.codp is null;
     select p.nome from pessoa p where p.codp not in (select e.codp from elenco e);
     select p.nome from pessoa p where p.codp not in (select e.codp from elenco e) and p.codp not in (select f.codd from filme f);
-12- 
+
+12- select f.titulo from filme f left join avaliacao a on f.codf = a.codf where a.nestrelas is null;
+
 13- select titulo, dur from filme f where anol between 1961 and 1970;
-14- 
+
+14- select p.nome from pessoa p join elenco e on e.codp = p.codp join papel pp on pp.codpp = e.codpapel where codpapel = 5;
+
 15- select count (coment) from avaliacao where email = 'cinefilo@yahoo.com';
 16- select paisn, count(codp) from pessoa group by paisn;
 17- select p.nome from pessoa p where dtnasc = (select min(dtnasc)from pessoa);
-18- select * from filme f where dur > (select avg(dur) from filme);
+18- select f.codf, f.titulo, f.dur from filme f where f.dur = (select min(dur) from filme);
+    select * from filme f where dur > (select avg(dur) from filme);
 19- select f.titulo, count(e.codf) from filme f natural left join elenco e group by f.titulo;
 20- select f.titulo, coalesce(round(avg(a.nestrelas),2)::text,'None') from filme f natural left join avaliacao a group by f.titulo;
     select f.titulo, coalesce(round(avg(a.nestrelas),2),-1) from filme f natural left join avaliacao a group by f.titulo;
@@ -166,11 +177,11 @@ Resposta: insert into train_route (idtr, idsfrom, idsto, datet) values (6, 6, 8,
 6. Implementar uma consulta que retorne no formato:
 Estação Origem	Estação Destino	Distância	Nome Trem	Tipo Trem	Data Partida
 Resultado da consulta (sem a rota incluída acima):
-from		to			distance	train_name	train_type	departure
+from		to		distance	train_name	train_type	departure
 Batcity		Dragonpolis	34.5		Coral		Steam		2021-05-10
 Supercity	Mycounty	12.4		Coral		Steam		2022-05-11
 Batcity		Mycounty	17.7		Transalpes	Diesel		2021-12-12
-Mycounty	Giants		8.7			Border		Diesel		2021-11-11
+Mycounty	Giants		8.7		Border		Diesel		2021-11-11
 Edgar Codd	Boyce		10.0		Brave		Steam		2021-11-11
 Giants		Boyce		13.2		Brave		Steam		2021-11-11
 */
